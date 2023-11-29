@@ -12,19 +12,19 @@ git clone https://github.com/amesval/build-ml-pipeline-for-short-term-rental-pri
 
 2. Move to root folder of the project.
 
-3. Create conda environment
+3. Create conda environment:
 ```
 conda env create -f environment.yml
 ```
 
-4. Change to conda environment
+4. Change to conda environment:
 ```
 conda activate nyc_airbnb_dev
 ```
 
-5. Get your API key from W&B (https://docs.wandb.ai/quickstart)
+5. Get your API key from W&B (https://docs.wandb.ai/quickstart).
 
-6. Run in the command line:
+6. Run next instruction in the command line:
 ```
 wandb.login()
 ```
