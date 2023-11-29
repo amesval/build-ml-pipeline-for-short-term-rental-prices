@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
- Download from W&B the raw dataset and apply some basic data cleaning, exporting the result to a new artifact
+Download from W&B the raw dataset and apply some basic data cleaning.
+The clean data is export as a new W&B artifact.
 """
 import argparse
 import logging
@@ -15,6 +16,10 @@ logger = logging.getLogger()
 
 def go(args):
 
+    """
+    Data cleaning pipelin
+    """
+
     run = wandb.init(job_type="basic_cleaning")
     run.config.update(args)
 
@@ -24,16 +29,15 @@ def go(args):
     df = pd.read_csv(artifact_path)
 
     logger.info("Cleaning dataset")
-    idx = df['price'].between(args.min_price, args.max_price)
+    idx = df['price'].between(args.min_price, args.max_price) # Drop rows with extreme prices
     df = df[idx].copy()
-    # Convert last_review to datetime
-    df['last_review'] = pd.to_datetime(df['last_review'])
-
+    df['last_review'] = pd.to_datetime(df['last_review']) # Convert last_review to datetime
+    # Filter longitude and latitude cols
     idx = df['longitude'].between(-74.25, -73.50) & df['latitude'].between(40.5, 41.2)
     df = df[idx].copy()
 
     filename = "clean_sample.csv"
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, index=False) # Save c
 
     logger.info("Creating output artifact: clean dataset")
     artifact = wandb.Artifact(
@@ -51,8 +55,6 @@ def go(args):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="A very basic data cleaning")
-
-    print(parser)
 
     parser.add_argument(
         "--input_artifact", 

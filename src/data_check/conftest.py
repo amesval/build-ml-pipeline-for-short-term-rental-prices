@@ -4,6 +4,9 @@ import wandb
 
 
 def pytest_addoption(parser):
+    """
+    The function defines the config parameters used by Pytest.
+    """
     parser.addoption("--csv", action="store")
     parser.addoption("--ref", action="store")
     parser.addoption("--kl_threshold", action="store")
@@ -13,10 +16,11 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope='session')
 def data(request):
+    """
+    Fixture that provides the dataset to be load from a csv file.
+    """
     run = wandb.init(job_type="data_tests", resume=True)
 
-    # Download input artifact. This will also note that this script is using this
-    # particular version of the artifact
     data_path = run.use_artifact(request.config.option.csv).file()
 
     if data_path is None:
@@ -29,10 +33,11 @@ def data(request):
 
 @pytest.fixture(scope='session')
 def ref_data(request):
+    """
+    Fixture that provides the reference dataset.
+    """
     run = wandb.init(job_type="data_tests", resume=True)
 
-    # Download input artifact. This will also note that this script is using this
-    # particular version of the artifact
     data_path = run.use_artifact(request.config.option.ref).file()
 
     if data_path is None:
@@ -45,6 +50,9 @@ def ref_data(request):
 
 @pytest.fixture(scope='session')
 def kl_threshold(request):
+    """
+    Returns the threshold to discriminate if two datasets are significantly different.
+    """
     kl_threshold = request.config.option.kl_threshold
 
     if kl_threshold is None:
@@ -54,6 +62,9 @@ def kl_threshold(request):
 
 @pytest.fixture(scope='session')
 def min_price(request):
+    """
+    Returns the minimum acceptable price value.
+    """
     min_price = request.config.option.min_price
 
     if min_price is None:
@@ -63,6 +74,9 @@ def min_price(request):
 
 @pytest.fixture(scope='session')
 def max_price(request):
+    """
+    Returns the maximum acceptable price value.
+    """
     max_price = request.config.option.max_price
 
     if max_price is None:

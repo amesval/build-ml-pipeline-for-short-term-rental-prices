@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-This script trains a Random Forest
+This script trains a Random Forest model for Short-term Rental Prices in NYC.
 """
 import argparse
 import logging
@@ -66,7 +66,7 @@ def go(args):
 
     sk_pipe, processed_features = get_inference_pipeline(rf_config, args.max_tfidf_features)
 
-    # Then fit it to the X_train, y_train data
+    # Fit model to the X_train, y_train data
     logger.info("Fitting")
 
     sk_pipe.fit(X_train, y_train)
@@ -134,7 +134,6 @@ def plot_feature_importance(pipe, feat_names):
 
 
 def get_inference_pipeline(rf_config, max_tfidf_features):
-    # Let's handle the categorical features first
     # Ordinal categorical are categorical values for which the order is meaningful, for example
     # for room type: 'Entire home/apt' > 'Private room' > 'Shared room'
     ordinal_categorical = ["room_type"]
@@ -150,7 +149,6 @@ def get_inference_pipeline(rf_config, max_tfidf_features):
     )
 
     # Let's impute the numerical columns to make sure we can handle missing values
-    # (note that we do not scale because the RF algorithm does not need that)
     zero_imputed = [
         "minimum_nights",
         "number_of_reviews",
@@ -162,7 +160,6 @@ def get_inference_pipeline(rf_config, max_tfidf_features):
     ]
     zero_imputer = SimpleImputer(strategy="constant", fill_value=0)
 
-    # A MINIMAL FEATURE ENGINEERING step:
     # we create a feature that represents the number of days passed since the last review
     # First we impute the missing review date with an old date (because there hasn't been
     # a review for a long time), and then we create a new feature from it,
@@ -183,7 +180,6 @@ def get_inference_pipeline(rf_config, max_tfidf_features):
         ),
     )
 
-    # Let's put everything together
     preprocessor = ColumnTransformer(
         transformers=[
             ("ordinal_cat", ordinal_categorical_preproc, ordinal_categorical),
@@ -198,17 +194,13 @@ def get_inference_pipeline(rf_config, max_tfidf_features):
     processed_features = ordinal_categorical + non_ordinal_categorical + zero_imputed + ["last_review", "name"]
 
     # Create random forest
-    random_Forest = RandomForestRegressor(**rf_config)
+    random_forest = RandomForestRegressor(**rf_config)
 
-    ######################################
-    # Create the inference pipeline. The pipeline must have 2 steps: a step called "preprocessor" applying the
-    # ColumnTransformer instance that we saved in the `preprocessor` variable, and a step called "random_forest"
-    # with the random forest instance that we just saved in the `random_forest` variable.
-    # HINT: Use the explicit Pipeline constructor so you can assign the names to the steps, do not use make_pipeline
+    # Make the inference pipeline.
     sk_pipe = Pipeline(
         steps=[
             ("preprocessor", preprocessor),
-            ("random_forest", random_Forest)
+            ("random_forest", random_forest)
         ]
     )
 

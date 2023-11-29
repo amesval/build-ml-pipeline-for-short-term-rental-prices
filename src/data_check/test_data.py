@@ -4,6 +4,9 @@ import scipy.stats
 
 
 def test_column_names(data):
+    """
+    Check the column names of the dataset.
+    """
 
     expected_colums = [
         "id",
@@ -31,6 +34,9 @@ def test_column_names(data):
 
 
 def test_neighborhood_names(data):
+    """
+    Verify the neighbourhoods in the neighbourhood_group column.
+    """
 
     known_names = ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"]
 
@@ -61,8 +67,14 @@ def test_similar_neigh_distrib(data: pd.DataFrame, ref_data: pd.DataFrame, kl_th
 
 
 def test_row_count(data):
+    """
+    Verify that the size of the dataset is in an acceptable range (not to large, not to small).
+    """
     assert 15000 < data.shape[0] < 1000000
 
 
 def test_price_range(data, min_price, max_price):
+    """
+    Verify the price range of each example in the dataset.
+    """
     assert data['price'].between(min_price, max_price).all()
