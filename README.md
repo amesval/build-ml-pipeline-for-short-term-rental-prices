@@ -26,7 +26,7 @@ conda activate nyc_airbnb_dev
 
 6. Run next instruction in the command line:
 ```
-wandb.login()
+wandb login <API_KEY>
 ```
 
 7. You should see a message similar to:
