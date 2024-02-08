@@ -109,10 +109,6 @@ For testing, just write:
 mlflow run . -P steps="test_regression_model"
 ```
 
-
-
-
-
 ## Run entire pipeline
 
 After running the pipeline for the first time, you can run the entire cycle at once from the command line:
@@ -127,7 +123,6 @@ train a model with a different value of *tfidf_features*:
 ```
 mlflow run . -P hydra_options="modeling.max_tfidf_features=10"
 ```
-
 
 ## Project artifacts
 
