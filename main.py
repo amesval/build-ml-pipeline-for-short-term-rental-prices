@@ -34,6 +34,7 @@ def go(config: DictConfig):
     # Steps to execute
     steps_par = config['main']['steps']
     active_steps = steps_par.split(",") if steps_par != "all" else _steps
+    active_steps = [step.strip() for step in active_steps]
 
     # Move to a temporary directory
     with tempfile.TemporaryDirectory() as tmp_dir:
