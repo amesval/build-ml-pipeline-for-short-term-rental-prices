@@ -3,6 +3,8 @@ Imagine that you are working for a property management company renting rooms and
 
 In this project we will build such a pipeline.
 
+This project is part of the ML DevOps Engineer Nanodegree (Udacity).
+
 ## Setup
 
 1. Clone repository:
